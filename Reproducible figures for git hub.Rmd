@@ -1,0 +1,107 @@
+---
+title: "Reproducible figures for github"
+author: "Sucheta"
+date: "2023-12-08"
+output: html_document
+---
+
+QUESTION 2
+
+
+INTRODUCTION
+
+I have already loaded the data into R. These steps will help me clean the data:
+ 
+```{r}
+clean_column_names<- function(penguins_data)
+  penguins_data%>%
+    select(-starts_with("Delta"))%>%
+    select(-Comments) %>%
+    clean_names()
+```
+
+```{r}
+remove_empty_columns_rows <- function(penguins_data)
+    penguins_data %>%
+        remove_empty(c("rows", "cols"))
+```
+
+HYPOTHESIS
+Null hypothesis: There is no statistically significant relationship between body mass and bill depth in the species of penguins samples in the "penguins" dataset.
+Alternative hypothesis: There is a relationship between body mass and bill depth. Bill depth increases/decreases with body mass.
+
+FIGURE
+```{r}
+ggplot(penguins, aes(x= body_mass_g, y = bill_depth_mm, color=species)) +
+  geom_point(position = position_jitter(width = 0.2, height = 0), size = 3) +
+  labs(title = "Individual Bill Lengths by Species",
+       x = "Body Mass (mm)",
+       y = "Bill Depth (g)") +
+  theme_minimal()+
+  ggtitle("Scatter Plot representing bpdy mass and bill depth")
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+STATISTICAL TEST
+
+```{r}
+model <- lm(bill_depth_mm ~ body_mass_g, data = penguins)
+
+# Using linear regression to compar ethe variables
+summary(model)
+```
+
+
+Call:
+lm(formula = bill_depth_mm ~ body_mass_g, data = penguins)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-3.7437 -1.2235 -0.0116  1.2326  4.3468 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 22.0339465  0.5036206   43.75   <2e-16 ***
+body_mass_g -0.0011621  0.0001177   -9.87   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1.744 on 340 degrees of freedom
+  (2 observations deleted due to missingness)
+Multiple R-squared:  0.2227,	Adjusted R-squared:  0.2204 
+F-statistic: 97.41 on 1 and 340 DF,  p-value: < 2.2e-16
+
+```{r}
+ggplot(penguins, aes(x = body_mass_g, y = bill_depth_mm)) +
+  geom_point() +  # Add points
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +  # Add linear regression line
+  labs(title = "Linear Regression: Body Mass vs Bill Depth",
+       x = "Body Mass (g)",
+       y = "Bill Depth (mm)") +
+  theme_minimal()
+```
+
+
+Figure2: This results figure shows the line of linear regression through the scatterplot. It is evident that the species that have a higher body mass tend to have a lower bill depth. However, within a species, the bill depth seems to be increasing with body mass. 
+
+RESULTS AND DISCUSSION
+
+Interpretation of the linear regression test:
+
+1. Coefficients: 22.0339465 is the Y intercept. This means that 22.0339465 mm represents the value of bill depth when body mass if 0. 
+
+-0.0011621 will be "m" in the equation mx+c=y. This means that as body mass increases by one gram, the bill length decreases by body_mass_g increases by one gram, the bill_depth_mm is expected to decrease by approximately 0.0011621 units.
+
+2. Both coefficients are highly statistically significant. This is because the p-value (<2e-16) is very low.
+
+3. The multiple R-squared value is 0.2227. This represents the proportion of the variance in bill depth that is explained by the model. Based on this, we can say that about 22.27% of the variability in bill depth is explained by the linear relationship with body mass.
+
+CONCLUSION
+This analysis shows that there is a significant negative relationship between body mass and bill length. This means that, as body mass increases, bill length tends to decrease. 
+
+This is not what I expected as I had assumed a greater body mass would be linked to a more calorific diet. A greater bill depth could help the penguins catch bigger fish and therefore provide more nutrition for less time spent hunting. 
