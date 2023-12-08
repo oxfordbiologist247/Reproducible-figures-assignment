@@ -11,7 +11,18 @@ QUESTION 2
 INTRODUCTION
 
 I have already loaded the data into R. These steps will help me clean the data:
- 
+
+```{r}
+data("penguins")
+head(penguins)
+summary(penguins)
+library(palmerpenguins)
+library(ggplot2)
+```
+
+```
+
+
 ```{r}
 clean_column_names<- function(penguins_data)
   penguins_data%>%
