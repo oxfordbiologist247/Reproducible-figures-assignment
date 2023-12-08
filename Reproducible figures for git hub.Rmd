@@ -1,6 +1,5 @@
 ---
 title: "Reproducible figures for github"
-author: "Sucheta"
 date: "2023-12-08"
 output: html_document
 ---
@@ -51,12 +50,6 @@ ggplot(penguins, aes(x= body_mass_g, y = bill_depth_mm, color=species)) +
   theme_minimal()+
   ggtitle("Scatter Plot representing bpdy mass and bill depth")
 ```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 STATISTICAL TEST
 
